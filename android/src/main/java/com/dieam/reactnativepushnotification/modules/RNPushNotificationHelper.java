@@ -458,7 +458,7 @@ public class RNPushNotificationHelper {
             // Sanity check, should never happen
             if (newFireDate != 0) {
                 // Log.d(LOG_TAG, String.format("Repeating notification with id %s at time %s",
-                        bundle.getString("id"), Long.toString(newFireDate)));
+                //         bundle.getString("id"), Long.toString(newFireDate)));
                 logger.debug(Logger.DEBUG, LOG_TAG + String.format("Repeating notification with id %s at time %s",
                 bundle.getString("id"), Long.toString(newFireDate)));
                 bundle.putDouble("fireDate", newFireDate);
