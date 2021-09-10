@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import org.owasp.esapi.ESAPI;
-import org.owasp.esapi.Logger;
+// import org.owasp.esapi.ESAPI;
+// import org.owasp.esapi.Logger;
 
 import java.util.Set;
 
@@ -20,7 +20,7 @@ public class RNPushNotificationBootEventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Logger logger = ESAPI.getLogger("ESAPILogging");
+        // Logger logger = ESAPI.getLogger("ESAPILogging");
             
         Log.i(LOG_TAG, "RNPushNotificationBootEventReceiver loading scheduled notifications");
 
@@ -38,12 +38,12 @@ public class RNPushNotificationBootEventReceiver extends BroadcastReceiver {
                         RNPushNotificationAttributes notificationAttributes = RNPushNotificationAttributes.fromJson(notificationAttributesJson);
 
                         if (notificationAttributes.getFireDate() < System.currentTimeMillis()) {
-                            logger.info(Logger.INFO, LOG_TAG + "RNPushNotificationBootEventReceiver: Showing notification for " +
-                            notificationAttributes.getId());
+                            // logger.info(Logger.INFO, LOG_TAG + "RNPushNotificationBootEventReceiver: Showing notification for " +
+                            // notificationAttributes.getId());
                             rnPushNotificationHelper.sendToNotificationCentre(notificationAttributes.toBundle());
                         } else {
-                            logger.info(Logger.INFO, LOG_TAG + "RNPushNotificationBootEventReceiver: Showing notification for " +
-                            notificationAttributes.getId());
+                            // logger.info(Logger.INFO, LOG_TAG + "RNPushNotificationBootEventReceiver: Showing notification for " +
+                            // notificationAttributes.getId());
                             rnPushNotificationHelper.sendNotificationScheduledCore(notificationAttributes.toBundle());
                         }
                     }

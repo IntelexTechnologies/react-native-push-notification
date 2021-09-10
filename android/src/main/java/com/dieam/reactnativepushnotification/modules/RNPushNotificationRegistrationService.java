@@ -3,8 +3,8 @@ package com.dieam.reactnativepushnotification.modules;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
-import org.owasp.esapi.ESAPI;
-import org.owasp.esapi.Logger;
+// import org.owasp.esapi.ESAPI;
+// import org.owasp.esapi.Logger;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -12,7 +12,7 @@ import com.google.android.gms.iid.InstanceID;
 import static com.dieam.reactnativepushnotification.modules.RNPushNotification.LOG_TAG;
 
 public class RNPushNotificationRegistrationService extends IntentService {
-    Logger logger = ESAPI.getLogger("ESAPILogging");
+    // Logger logger = ESAPI.getLogger("ESAPILogging");
 
     private static final String TAG = "RNPushNotification";
 
@@ -30,7 +30,7 @@ public class RNPushNotificationRegistrationService extends IntentService {
             sendRegistrationToken(token);
         } catch (Exception e) {
             // Log.e(LOG_TAG, TAG + " failed to process intent " + intent, e);
-            logger.error(Logger.ERROR, LOG_TAG + TAG + " failed to process intent " + intent, e);
+            // logger.error(Logger.ERROR, LOG_TAG + TAG + " failed to process intent " + intent, e);
         }
     }
 
