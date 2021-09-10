@@ -29,7 +29,7 @@ public class RNPushNotificationRegistrationService extends IntentService {
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             sendRegistrationToken(token);
         } catch (Exception e) {
-            // Log.e(LOG_TAG, TAG + " failed to process intent " + intent, e);
+            Log.e(LOG_TAG, TAG + " failed to process intent " + intent, e);
             // logger.error(Logger.ERROR, LOG_TAG + TAG + " failed to process intent " + intent, e);
         }
     }
