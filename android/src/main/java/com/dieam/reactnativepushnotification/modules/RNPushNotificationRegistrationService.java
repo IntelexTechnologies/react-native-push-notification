@@ -10,7 +10,7 @@ import com.google.android.gms.iid.InstanceID;
 import static com.dieam.reactnativepushnotification.modules.RNPushNotification.LOG_TAG;
 
 public class RNPushNotificationRegistrationService extends IntentService {
-
+   
     private static final String TAG = "RNPushNotification";
 
     public RNPushNotificationRegistrationService() {
@@ -26,7 +26,9 @@ public class RNPushNotificationRegistrationService extends IntentService {
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             sendRegistrationToken(token);
         } catch (Exception e) {
-            Log.e(LOG_TAG, TAG + " failed to process intent " + intent, e);
+            String errorStr = TAG + " failed to process intent " + intent;
+            errorStr = replaceCRLFWithUnderscore(errorStr);
+            Log.e(LOG_TAG, errorStr, e);
         }
     }
 
@@ -35,4 +37,10 @@ public class RNPushNotificationRegistrationService extends IntentService {
         intent.putExtra("token", token);
         sendBroadcast(intent);
     }
+
+    private String replaceCRLFWithUnderscore(String value) {
+        // Replace any carriage returns and line feeds with an underscore to prevent log injection attacks.
+        // Ref: ESAPI library https://github.com/javabeanz/owasp-security-logging/blob/master/owasp-security-logging-common/src/main/java/org/owasp/security/logging/Utils.java
+		return value.replace('\n', '_').replace('\r', '_');
+	}
 }

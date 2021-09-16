@@ -17,7 +17,7 @@ import static com.dieam.reactnativepushnotification.modules.RNPushNotification.L
 public class RNPushNotificationBootEventReceiver extends BroadcastReceiver {
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent) {    
         Log.i(LOG_TAG, "RNPushNotificationBootEventReceiver loading scheduled notifications");
 
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
@@ -34,12 +34,16 @@ public class RNPushNotificationBootEventReceiver extends BroadcastReceiver {
                         RNPushNotificationAttributes notificationAttributes = RNPushNotificationAttributes.fromJson(notificationAttributesJson);
 
                         if (notificationAttributes.getFireDate() < System.currentTimeMillis()) {
-                            Log.i(LOG_TAG, "RNPushNotificationBootEventReceiver: Showing notification for " +
-                                    notificationAttributes.getId());
+                            String infoStr = "RNPushNotificationBootEventReceiver: Showing notification for " +
+                            notificationAttributes.getId();
+                            infoStr = replaceCRLFWithUnderscore(infoStr);
+                            Log.i(LOG_TAG, infoStr);
                             rnPushNotificationHelper.sendToNotificationCentre(notificationAttributes.toBundle());
                         } else {
-                            Log.i(LOG_TAG, "RNPushNotificationBootEventReceiver: Scheduling notification for " +
-                                    notificationAttributes.getId());
+                            String infoStr ="RNPushNotificationBootEventReceiver: Scheduling notification for " +
+                            notificationAttributes.getId();
+                            infoStr = replaceCRLFWithUnderscore(infoStr);
+                            Log.i(LOG_TAG, infoStr);
                             rnPushNotificationHelper.sendNotificationScheduledCore(notificationAttributes.toBundle());
                         }
                     }
@@ -49,4 +53,10 @@ public class RNPushNotificationBootEventReceiver extends BroadcastReceiver {
             }
         }
     }
+
+    private String replaceCRLFWithUnderscore(String value) {
+        // Replace any carriage returns and line feeds with an underscore to prevent log injection attacks.
+        // Ref: ESAPI library https://github.com/javabeanz/owasp-security-logging/blob/master/owasp-security-logging-common/src/main/java/org/owasp/security/logging/Utils.java
+		return value.replace('\n', '_').replace('\r', '_');
+	}
 }

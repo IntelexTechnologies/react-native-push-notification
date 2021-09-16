@@ -76,6 +76,12 @@ public class RNPushNotificationHelper {
         return PendingIntent.getBroadcast(context, notificationID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    private String replaceCRLFWithUnderscore(String value) {
+        // Replace any carriage returns and line feeds with an underscore to prevent log injection attacks.
+        // Ref: ESAPI library https://github.com/javabeanz/owasp-security-logging/blob/master/owasp-security-logging-common/src/main/java/org/owasp/security/logging/Utils.java
+		return value.replace('\n', '_').replace('\r', '_');
+	}
+
     public void sendNotificationScheduled(Bundle bundle) {
         Class intentClass = getMainActivityClass();
         if (intentClass == null) {
@@ -102,7 +108,9 @@ public class RNPushNotificationHelper {
         RNPushNotificationAttributes notificationAttributes = new RNPushNotificationAttributes(bundle);
         String id = notificationAttributes.getId();
 
-        Log.d(LOG_TAG, "Storing push notification with id " + id);
+        String debugStr =  "Storing push notification with id " + id;
+        debugStr = replaceCRLFWithUnderscore(debugStr);
+        Log.d(LOG_TAG, debugStr);
 
         SharedPreferences.Editor editor = scheduledNotificationsPersistence.edit();
         editor.putString(id, notificationAttributes.toJson().toString());
@@ -110,7 +118,9 @@ public class RNPushNotificationHelper {
 
         boolean isSaved = scheduledNotificationsPersistence.contains(id);
         if (!isSaved) {
-            Log.e(LOG_TAG, "Failed to save " + id);
+            String errorStr =  "Failed to save " + id;
+            errorStr = replaceCRLFWithUnderscore(errorStr);
+            Log.e(LOG_TAG, errorStr);
         }
 
         sendNotificationScheduledCore(bundle);
@@ -123,8 +133,11 @@ public class RNPushNotificationHelper {
         // notification to the user
         PendingIntent pendingIntent = toScheduleNotificationIntent(bundle);
 
-        Log.d(LOG_TAG, String.format("Setting a notification with id %s at time %s",
-                bundle.getString("id"), Long.toString(fireDate)));
+        String debugStr =  String.format("Setting a notification with id %s at time %s",
+        bundle.getString("id"), Long.toString(fireDate));
+        debugStr = replaceCRLFWithUnderscore(debugStr);
+        Log.d(LOG_TAG, debugStr);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getAlarmManager().setExact(AlarmManager.RTC_WAKEUP, fireDate, pendingIntent);
         } else {
@@ -142,7 +155,10 @@ public class RNPushNotificationHelper {
 
             if (bundle.getString("message") == null) {
                 // this happens when a 'data' notification is received - we do not synthesize a local notification in this case
-                Log.d(LOG_TAG, "Cannot send to notification centre because there is no 'message' field in: " + bundle);
+
+                String errorStr = "Cannot send to notification centre because there is no 'message' field in: " + bundle;
+                errorStr = replaceCRLFWithUnderscore(errorStr);
+                Log.e(LOG_TAG, errorStr); 
                 return;
             }
 
@@ -414,13 +430,16 @@ public class RNPushNotificationHelper {
 
             // Sanity checks
             if (!validRepeatType) {
-                Log.w(LOG_TAG, String.format("Invalid repeatType specified as %s", repeatType));
+                String warningStr =  String.format("Invalid repeatType specified as %s", repeatType);
+                warningStr = replaceCRLFWithUnderscore(warningStr);
+                Log.w(LOG_TAG,warningStr);
                 return;
             }
 
             if ("time".equals(repeatType) && repeatTime <= 0) {
-                Log.w(LOG_TAG, "repeatType specified as time but no repeatTime " +
-                        "has been mentioned");
+                String warningStr =  "repeatType specified as time but no repeatTime " + "has been mentioned";
+                warningStr = replaceCRLFWithUnderscore(warningStr);
+                Log.w(LOG_TAG,warningStr);
                 return;
             }
 
@@ -446,8 +465,11 @@ public class RNPushNotificationHelper {
 
             // Sanity check, should never happen
             if (newFireDate != 0) {
-                Log.d(LOG_TAG, String.format("Repeating notification with id %s at time %s",
-                        bundle.getString("id"), Long.toString(newFireDate)));
+                String debugStr =  String.format("Repeating notification with id %s at time %s",
+                bundle.getString("id"), Long.toString(newFireDate));
+                debugStr = replaceCRLFWithUnderscore(debugStr);
+                Log.d(LOG_TAG,debugStr);
+                
                 bundle.putDouble("fireDate", newFireDate);
                 this.sendNotificationScheduled(bundle);
             }
