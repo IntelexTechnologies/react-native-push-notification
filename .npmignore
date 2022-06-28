@@ -60,3 +60,15 @@ local.properties
 
 # Example app
 example
+
+# Git
+.git 
+
+# GitHub
+.github/*
+
+# Docs
+submitting-a-pull-request.md
+
+# Vscode
+.vscode/*
