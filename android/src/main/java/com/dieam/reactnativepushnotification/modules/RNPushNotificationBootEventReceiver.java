@@ -47,11 +47,11 @@ public class RNPushNotificationBootEventReceiver extends BroadcastReceiver {
                             rnPushNotificationHelper.sendNotificationScheduledCore(notificationAttributes.toBundle());
                         }
                     }
-		    catch (Exception e) {
-		    	Log.e(LOG_TAG, "Problem with boot receiver loading notification " + id, e);
-		    }
+		}catch (Exception e) {
+		    Log.e(LOG_TAG, "Problem with boot receiver loading notification " + id, e);
 		}
-            }
+		
+	    }
         }
     }
 
