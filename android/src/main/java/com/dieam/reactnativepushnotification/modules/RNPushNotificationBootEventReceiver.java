@@ -17,7 +17,7 @@ import static com.dieam.reactnativepushnotification.modules.RNPushNotification.L
 public class RNPushNotificationBootEventReceiver extends BroadcastReceiver {
 
     @Override
-    public void onReceive(Context context, Intent intent) {    
+public void onReceive(Context context, Intent intent) {    
         Log.i(LOG_TAG, "RNPushNotificationBootEventReceiver loading scheduled notifications");
 
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
@@ -47,12 +47,11 @@ public class RNPushNotificationBootEventReceiver extends BroadcastReceiver {
                             rnPushNotificationHelper.sendNotificationScheduledCore(notificationAttributes.toBundle());
                         }
                     }
-		}catch (Exception e) {
-		    Log.e(LOG_TAG, "Problem with boot receiver loading notification " + id, e);
-		}
-		
+                } catch (Exception e) {
+		    	    Log.e(LOG_TAG, "Problem with boot receiver loading notification " + id, e);
+                }
 	    }
-        }
+	}
     }
 
     private String replaceCRLFWithUnderscore(String value) {
